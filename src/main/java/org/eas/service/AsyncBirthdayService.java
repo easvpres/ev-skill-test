@@ -7,8 +7,10 @@ import org.eas.exception.NoSuchJobException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +29,18 @@ public class AsyncBirthdayService {
 
     private ConcurrentMap<String, Future<List<DaysToBirthdayLeft>>> map = new ConcurrentHashMap<>();
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(10);
+    @Value("${async.birthday.service.thread.count}")
+    private int threadCount;
+
+    @Value("${async.birthday.service.test.delay.millis}")
+    private int testJobDelay;
+
+    private ExecutorService executorService;
+
+    @PostConstruct
+    private void postConstruct() {
+        executorService = Executors.newFixedThreadPool(threadCount);
+    }
 
     /**
      * @return jobId
@@ -35,7 +48,7 @@ public class AsyncBirthdayService {
     public String createJob(Integer month) {
         logger.info("createJob(month={})", month);
         Future<List<DaysToBirthdayLeft>> future = executorService.submit(() -> {
-            Thread.sleep(10000);
+            Thread.sleep(testJobDelay);
             LocalDate now = LocalDate.now();
             return personService.getDaysToBirthdayLeft(now, month != null ? month : now.getMonthValue());
         });

@@ -1,11 +1,11 @@
 package org.eas.service;
 
 import org.eas.AppConfig;
-import org.eas.dto.DaysToBirthdayLeftResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -33,6 +33,9 @@ public class AppControllerTest {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
+    @Value("${async.birthday.service.test.delay.millis}")
+    private int testJobDelay;
+
     @Test
     public void getAccount() throws Exception {
         String jobId = mockMvc.perform(post("/birthday/start").param("month", "12").accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
@@ -51,7 +54,7 @@ public class AppControllerTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("jobStatus").value(JOB_NOT_FOUND.toString()));
 
-        Thread.sleep(10000);
+        Thread.sleep(testJobDelay);
 
         mockMvc.perform(get("/birthday/result").param("jobId", jobId).accept(MediaType.parseMediaType("application/json;charset=UTF-8")))
                 .andExpect(status().isOk())
