@@ -1,8 +1,9 @@
 package org.eas.service;
 
-import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.time.LocalDate;
 
 /**
  * @author eas
@@ -13,16 +14,16 @@ public class DaysLeftCalculatorTest {
 
     @Test
     public void test() throws Exception {
-        DateTime now = new DateTime(2016, 1, 1, 0, 0, 0);
-        DateTime birthday = new DateTime(2000, 1, 1, 0, 0, 0);
+        LocalDate now = LocalDate.of(2016, 1, 1);
+        LocalDate birthday = LocalDate.of(2000, 1, 1);
         Assert.assertEquals(0, daysLeftCalculator.calculate(now, birthday));
 
-        now = new DateTime(2016, 1, 1, 0, 0, 0);
-        birthday = new DateTime(2000, 1, 2, 0, 0, 0);
+        now = LocalDate.of(2016, 1, 1);
+        birthday = LocalDate.of(2000, 1, 2);
         Assert.assertEquals(1, daysLeftCalculator.calculate(now, birthday));
 
-        now = new DateTime(2016, 1, 2, 0, 0, 0);
-        birthday = new DateTime(2000, 1, 1, 0, 0, 0);
+        now = LocalDate.of(2016, 1, 2);
+        birthday = LocalDate.of(2000, 1, 1);
         Assert.assertEquals(365, daysLeftCalculator.calculate(now, birthday));
     }
 }

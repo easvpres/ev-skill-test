@@ -1,7 +1,6 @@
 package org.eas.repository;
 
 import org.eas.model.Person;
-import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -29,7 +28,7 @@ public class InMemoryPersonRepository implements PersonRepository {
     @Override
     public List<Person> findByMonth(int month) {
         logger.info("findByMonth(month={})", month);
-        return persons.stream().filter(person -> month == new LocalDateTime(person.getBirthday()).getMonthOfYear()).collect(Collectors.toList());
+        return persons.stream().filter(person -> month == person.getBirthday().getMonthValue()).collect(Collectors.toList());
     }
 
 }

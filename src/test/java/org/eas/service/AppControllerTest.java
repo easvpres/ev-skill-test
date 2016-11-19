@@ -59,9 +59,9 @@ public class AppControllerTest {
                 .andExpect(jsonPath("jobStatus").value(DONE.toString()))
                 .andExpect(jsonPath("data.length()").value(2))
                 .andExpect(jsonPath("data[0].personnName").value("Alexander"))
-                .andExpect(jsonPath("data[0].daysLeft").value(22))
+                .andExpect(jsonPath("data[0].daysLeft").value(23))
                 .andExpect(jsonPath("data[1].personnName").value("Sergey"))
-                .andExpect(jsonPath("data[1].daysLeft").value(34));
+                .andExpect(jsonPath("data[1].daysLeft").value(35));
     }
 
 }

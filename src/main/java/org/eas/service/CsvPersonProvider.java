@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class CsvPersonProvider {
     private static final Logger logger = LoggerFactory.getLogger(CsvPersonProvider.class);
 
     public static final String SEPARATOR = ",";
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public List<Person> get(String csvFile) {
         List<Person> result = new ArrayList<>();
@@ -31,8 +32,8 @@ public class CsvPersonProvider {
             while ((line = br.readLine()) != null) {
                 String[] columns = line.split(SEPARATOR);
                 try {
-                    result.add(new Person(columns[0], dateFormat.parse(columns[1])));
-                } catch (ParseException e) {
+                    result.add(new Person(columns[0], LocalDate.parse(columns[1], DATE_TIME_FORMATTER)));
+                } catch (DateTimeParseException e) {
                     logger.error("can't parse date", e);
                 }
             }

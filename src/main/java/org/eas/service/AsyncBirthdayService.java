@@ -1,16 +1,15 @@
 package org.eas.service;
 
-import org.eas.controller.AppController;
 import org.eas.dto.DaysToBirthdayLeft;
 import org.eas.exception.JobExecutionException;
 import org.eas.exception.JobInProgressException;
 import org.eas.exception.NoSuchJobException;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.*;
@@ -37,7 +36,8 @@ public class AsyncBirthdayService {
         logger.info("createJob(month={})", month);
         Future<List<DaysToBirthdayLeft>> future = executorService.submit(() -> {
             Thread.sleep(10000);
-            return personService.getDaysToBirthdayLeft(month != null ? month : new DateTime().getMonthOfYear());
+            LocalDate now = LocalDate.now();
+            return personService.getDaysToBirthdayLeft(now, month != null ? month : now.getMonthValue());
         });
         String jobId = UUID.randomUUID().toString();
         map.put(jobId, future);

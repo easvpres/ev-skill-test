@@ -1,18 +1,18 @@
 package org.eas.model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * @author eas
  */
 public class Person {
     private String name;
-    private Date birthday;
+    private LocalDate birthday;
 
     public Person() {
     }
 
-    public Person(String name, Date birthday) {
+    public Person(String name, LocalDate birthday) {
         this.name = name;
         this.birthday = birthday;
     }
@@ -25,11 +25,11 @@ public class Person {
         this.name = name;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 }
